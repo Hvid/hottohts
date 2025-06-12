@@ -49,7 +49,7 @@ See `example.ts` for a full usage example. It prints all available data fields a
 
 ## Credits
 - Ported from [Hottohpy](https://github.com/benlbrm/hottohpy) by [benlbrm](https://github.com/benlbrm).
-- TypeScript port by the open-source community.
+- TypeScript port mostly by AI and Hvid
 
 ## License
 MIT
