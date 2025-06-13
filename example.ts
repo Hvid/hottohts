@@ -9,7 +9,8 @@ import { Hottoh } from './hottoht';
 const stove = new Hottoh('192.168.1.158', 5001, 0);
 stove.connect();
 
-setInterval(() => {
+// Poll data every 2 seconds
+const intervalId = setInterval(() => {
     console.log("#### Start Stove Data's ####");
     function printWithIndices(label: string, data: any[] | null) {
         if (!data) {
@@ -85,3 +86,21 @@ setInterval(() => {
     console.log(`_getSetMaxDhw [Data2[17], INDEX_SET_MAX_DHW]: ${stove._getSetMaxDhw()}`);
     console.log("#### End Stove Data's ####");
 }, 2000);
+
+// Handle application shutdown
+process.on('SIGINT', () => {
+    console.log('Shutting down...');
+    clearInterval(intervalId);
+    stove.disconnect();
+    stove.dispose();
+    process.exit(0);
+});
+
+// If running in a Node.js environment without proper signal handling
+// (like in some embedded systems), you might want to add a fallback cleanup
+process.on('exit', () => {
+    if (stove) {
+        stove.disconnect();
+        stove.dispose();
+    }
+});

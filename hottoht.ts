@@ -21,6 +21,7 @@ export class Hottoh {
     private port: number;
     private address: string;
     public client: HottohRemoteClient;
+    private _isDisposed: boolean = false;
 
     constructor(address: string, port: number, id: number = 0) {
         this.port = port;
@@ -28,12 +29,35 @@ export class Hottoh {
         this.client = new HottohRemoteClient(this.address, this.port, id);
     }
 
+    /**
+     * Connect to the stove and start polling
+     */
     public connect(): void {
+        if (this._isDisposed) {
+            // If already disposed, recreate the client
+            this.client = new HottohRemoteClient(this.address, this.port);
+            this._isDisposed = false;
+        }
         this.client.start();
     }
 
+    /**
+     * Disconnect from the stove and stop polling
+     */
     public disconnect(): void {
         this.client.stop();
+    }
+
+    /**
+     * Properly dispose all resources to prevent memory leaks
+     * Call this when completely done with the Hottoh instance
+     */
+    public dispose(): void {
+        if (this._isDisposed) return;
+        
+        this.disconnect();
+        this.client.dispose();
+        this._isDisposed = true;
     }
 
     public isConnected(): boolean {
