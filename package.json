@@ -1,18 +1,27 @@
 {
   "name": "hottohts",
-  "version": "1.0.0",
-  "description": "1:1 TypeScript port of hottohpy Python project.",
+  "version": "1.0.1",
+  "description": "TypeScript library for HottoH pellet stoves",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "start": "node dist/example.js"
+    "start": "node dist/example.js",
+    "prepublishOnly": "npm run build"
   },
   "files": [
     "dist",
     "README.md"
   ],
-  "author": "Your Name",
+  "keywords": [
+    "hottoh",
+    "stove",
+    "pellet",
+    "home-automation",
+    "smarthome",
+    "homey"
+  ],
+  "author": "Mikkel Hvid",
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^24.0.0",

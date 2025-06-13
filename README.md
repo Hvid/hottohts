@@ -19,12 +19,49 @@ A TypeScript/Node.js module for full-featured communication with HottoH pellet s
 - Full support for all bitfield/feature queries (e.g., isBoilerEnabled, getFanNumber, etc).
 - Robust TCP communication with CRC and packet formatting matching the stove's protocol.
 - Asynchronous, event-driven Node.js implementation.
+- Memory leak protection for 24/7 operation in production environments.
+- Proper socket and event listener management for long-running applications.
 - Example script included for real-time monitoring and control.
 
 ## Installation & Usage
 
 ```zsh
-npm install	npm run build
+npm install hottohts
+```
+
+Basic usage:
+
+```typescript
+import { Hottoh } from 'hottohts';
+
+// Create a new stove instance
+const stove = new Hottoh('192.168.1.100', 5001);
+
+// Connect to the stove and start polling
+stove.connect();
+
+// Read stove data
+console.log(`Temperature: ${stove.getTemperatureRoom1()}`);
+console.log(`Stove status: ${stove.getStoveState()}`);
+
+// Control the stove
+stove.setTemperature(22); // Set temperature to 22°C
+stove.setPowerLevel(3);   // Set power level to 3
+
+// Proper cleanup when done
+// For long-running applications, add this to your shutdown routine
+process.on('SIGINT', () => {
+  stove.disconnect();
+  stove.dispose();
+  process.exit(0);
+});
+```
+
+For development:
+
+```zsh
+npm install
+npm run build
 npm start   # Runs the example (edit the IP address in example.ts as needed)
 ```
 
@@ -50,6 +87,20 @@ See `example.ts` for a full usage example. It prints all available data fields a
 ## Credits
 - Ported from [Hottohpy](https://github.com/benlbrm/hottohpy) by [benlbrm](https://github.com/benlbrm).
 - TypeScript port mostly by AI and Hvid
+- Memory leak fixes and production improvements for v1.0.1
+
+## Changelog
+
+### 1.0.1 (June 13, 2025)
+- Fixed memory leaks in socket connections and event listeners
+- Added proper resource management for long-running applications
+- Added `dispose()` method for proper cleanup of resources
+- Improved reconnection logic and error handling
+- Enhanced example with proper shutdown handling
+- Maintained 100% backward compatibility with v1.0.0
+
+### 1.0.0 (Initial Release)
+- Initial port of Hottohpy to TypeScript
 
 ## License
 MIT
